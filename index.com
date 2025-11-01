@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tembak Pacar 💘</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      color: #fff;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+
+    header {
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1.1em;
+    }
+
+    section {
+      background: rgba(255, 255, 255, 0.15);
+      margin: 20px auto;
+      padding: 25px;
+      border-radius: 12px;
+      width: 85%;
+      max-width: 500px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    button {
+      background-color: #fff;
+      color: #ff4e88;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 8px;
+      font-size: 18px;
+      cursor: pointer;
+      margin: 8px;
+      transition: all 0.2s ease;
+    }
+
+    button:hover {
+      transform: scale(1.1);
+      background-color: #ffe6ed;
+    }
+
+    .heart {
+      font-size: 60px;
+      animation: pulse 1s infinite;
+      display: none;
+      margin-top: 20px;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    footer {
+      margin-top: 30px;
+      padding: 15px;
+      background-color: rgba(255,255,255,0.2);
+      font-size: 14px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    a {
+      color: #fff;
+      text-decoration: underline;
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>💘 Tembak Pacar 💘</h1>
+    <p>Jawab dulu pertanyaanku sebelum aku nembak kamu 😳</p>
+  </header>
+
+  <section id="game">
+    <div id="pertanyaan"></div>
+    <div id="jawaban"></div>
+  </section>
+
+  <div id="hasil" style="font-size: 22px; margin-top: 20px;"></div>
+  <div class="heart" id="heart">❤️</div>
+
+  <button id="shareBtn" class="hidden">Bagikan ke Teman 💌</button>
+
+  <footer>
+    © 2025 Dibuat dengan ❤️ oleh [zam zam]
+  </footer>
+
+  <script>
+    const pertanyaanList = [
+      { tanya: "Kamu suka kejutan nggak? 🎁", jawaban: ["Banget!", "Tergantung dari siapa 😏"] },
+      { tanya: "Kalau ada yang naksir kamu, kamu bakal gimana? 😳", jawaban: ["Tanya dulu siapa 😆", "Langsung senyum-senyum 🙈"] },
+      { tanya: "Kamu percaya cinta dari chat bisa tumbuh? 💬", jawaban: ["Bisa banget 💕", "Kalau nyambung sih bisa 😚"] },
+      { tanya: "Kamu siap nggak kalau aku ngomong jujur sekarang? 😅", jawaban: ["Siap banget 😍", "Deg-degan nih 🫣"] }
+    ];
+
+    let index = 0;
+    const pertanyaanEl = document.getElementById("pertanyaan");
+    const jawabanEl = document.getElementById("jawaban");
+    const hasilEl = document.getElementById("hasil");
+    const heart = document.getElementById("heart");
+    const shareBtn = document.getElementById("shareBtn");
+
+    function tampilPertanyaan() {
+      if (index < pertanyaanList.length) {
+        const p = pertanyaanList[index];
+        pertanyaanEl.innerHTML = `<h2>${p.tanya}</h2>`;
+        jawabanEl.innerHTML = "";
+        p.jawaban.forEach(j => {
+          const btn = document.createElement("button");
+          btn.textContent = j;
+          btn.onclick = () => {
+            index++;
+            tampilPertanyaan();
+          };
+          jawabanEl.appendChild(btn);
+        });
+      } else {
+        tembakPacar();
+      }
+    }
+
+    function tembakPacar() {
+      pertanyaanEl.innerHTML = "";
+      jawabanEl.innerHTML = "";
+      hasilEl.innerHTML = "Aku cuma mau bilang... Aku suka banget sama kamu 😍<br>Mau nggak jadi pacarku? 💖";
+      heart.style.display = "block";
+      shareBtn.classList.remove("hidden");
+    }
+
+    // SHARE tombol — dengan fallback untuk Firefox
+    shareBtn.addEventListener("click", async () => {
+      const shareData = {
+        title: "Tembak Pacar 💘",
+        text: "Aku baru aja nembak kamu lewat web ini 😳💌 Coba deh liat!",
+        url: window.location.href
+      };
+
+      if (navigator.share) {
+        try {
+          await navigator.share(shareData);
+        } catch (err) {
+          console.error("Gagal share:", err);
+        }
+      } else {
+        const url = encodeURIComponent(window.location.href);
+        const text = encodeURIComponent("Aku baru aja nembak kamu lewat web ini 😳💌");
+        const wa = `https://api.whatsapp.com/send?text=${text}%20${url}`;
+        const fb = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+        const tw = `https://twitter.com/intent/tweet?text=${text}%20${url}`;
+
+        hasilEl.innerHTML = `
+          ❤️ Mau share ke dia? Pilih salah satu:<br><br>
+          👉 <a href="${wa}" target="_blank">WhatsApp</a><br>
+          👉 <a href="${fb}" target="_blank">Facebook</a><br>
+          👉 <a href="${tw}" target="_blank">Twitter</a>
+        `;
+      }
+    });
+
+    tampilPertanyaan();
+  </script>
+</body>
+</html>
